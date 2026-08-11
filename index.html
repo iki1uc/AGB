@@ -2,107 +2,55 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>GHOST-SCAN – Systemlage</title>
+<title>AGB · 8-Wege · RAW/NC-System</title>
 
 <style>
-  body { font-family: Arial; background:#111; color:#eee; }
-  h1 { text-align:center; }
-  .respo-box {
-    border:1px solid #444;
-    padding:10px;
-    margin:10px;
-    background:#222;
-  }
-  .ok { color:#00ff88; }
-  .help { color:#ffcc00; }
-  .error { color:#ff4444; }
+  body { background:#000; color:#0f0; font-family:Consolas; padding:20px; }
+  h1, h2 { color:#6cf; }
+  pre { background:#111; border:1px solid #333; padding:12px; }
+  a { color:#6cf; display:block; margin:6px 0; }
+  .block { margin-bottom:30px; }
 </style>
 </head>
 
 <body>
 
-<h1>GHOST‑SCAN – Systemlage</h1>
+<h1>AGB · RAW · NC · 8-Wege-System</h1>
 
-<div id="output"></div>
+<pre>
+SYSTEM: 6E / 6D
+RAW: NC-RAW
+MATRIX: 9×9
+OPERATOR: BEAT∞ → REV1.0 → WIN∞
+WEGE: 8 Ein- & Ausstiege
+</pre>
 
-<script src="/fin.e.js"></script>
+<div class="block">
+<h2>8-Wege-Achsen</h2>
+<a href="./↑_0O/X.room">↑ Höhe</a>
+<a href="./↥_0O/X.room.IN">↥ Ober-Höhe</a>
 
-<script>
-// ------------------------------------------------------
-// RESPO-Liste (ALLE Cluster)
-// ------------------------------------------------------
-const RESPO_NAMES = [
-  "AIR",
-  "boerse",
-  "markt3",
-  "HOME",
-  "USE",
-  "ACSH",
-  "REAL",
-  "BIL",
-  "DU",
-  "NG"
-];
+<a href="./→_O0/X.room">→ Breite</a>
+<a href="./↦_O0/X.room.OUT">↦ Ober-Breite</a>
 
-// ------------------------------------------------------
-// Loader
-// ------------------------------------------------------
-async function loadRespo(name){
-  try {
-    const res = await fetch(`/RESPO/${name}.json`);
-    return await res.json();
-  } catch(e){
-    return { NAME:name, MISS:true };
-  }
-}
+<a href="./↧_R0/X.room">↧ Tiefe</a>
+<a href="./↧²_R0/META9.room">↧² Unter-Tiefe</a>
 
-async function loadAllRespos(){
-  const respos = [];
-  for(const n of RESPO_NAMES){
-    respos.push(await loadRespo(n));
-  }
-  return respos;
-}
+<a href="./∞_0M/META360.room">∞ Mystery</a>
+<a href="./∞²_0M/META.room">∞² Deep-Mystery</a>
+</div>
 
-// ------------------------------------------------------
-// Renderer
-// ------------------------------------------------------
-function renderScan(scan){
-  const out = document.getElementById("output");
-  out.innerHTML = "";
+<div class="block">
+<h2>META · Räume</h2>
+<a href="./META.room">META · Basis</a>
+<a href="./META9.room">META9 · 9×9</a>
+<a href="./META360.room">META360 · Rotation</a>
+</div>
 
-  scan.forEach(r => {
-    const box = document.createElement("div");
-    box.className = "respo-box";
-
-    let statusClass = "ok";
-    if(r.RESULT === "HELFEN") statusClass = "help";
-    if(r.ERROR === true) statusClass = "error";
-    if(r.MISS === true) statusClass = "error";
-
-    box.innerHTML = `
-      <h2 class="${statusClass}">${r.NAME}</h2>
-      <p><b>ID:</b> ${r.ID}</p>
-      <p><b>LAGE:</b> ${r.RAUM ? JSON.stringify(r.RAUM) : "(keine LAGE)"}</p>
-      <p><b>STATUS:</b> ${r.STATUS}</p>
-      <p><b>RESULT:</b> ${r.RESULT}</p>
-      <p><b>OUT:</b> ${JSON.stringify(r.OUT)}</p>
-      <p><b>REAL:</b> ${r.WAHRHEIT || "?"}</p>
-      <p><b>EDIT:</b> ${r.IST_IST || "?"}</p>
-    `;
-
-    out.appendChild(box);
-  });
-}
-
-// ------------------------------------------------------
-// Start
-// ------------------------------------------------------
-loadAllRespos().then(respos => {
-  const scan = respos.map(r => GHOST_SCAN_REAL(r));
-  renderScan(scan);
-});
-</script>
+<div class="block">
+<h2>Operator</h2>
+<a href="./9Operator.me">9Operator.me · BEAT∞ / REV1.0 / WIN∞</a>
+</div>
 
 </body>
 </html>
